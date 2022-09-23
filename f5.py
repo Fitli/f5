@@ -6,6 +6,13 @@ import requests
 import discord
 from discord.ext import commands, tasks
 
+def myHash(text:str):
+  hash=0
+  for ch in text:
+    hash = ( hash*59611  ^ ord(ch)*65543) & 0xFFFFFFFF
+  return hash
+
+
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -121,7 +128,7 @@ def download(addr):
         print(f"can't reach {addr}")
         return -1
     else:
-        return hash(r.text)
+        return myHash(r.text)
 
 
 
