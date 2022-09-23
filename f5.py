@@ -11,10 +11,23 @@ intents.message_content = True
 
 client = commands.Bot(command_prefix='.', intents=intents, help_command=None)
 
-with open("config.json") as f:
-    conf = json.load(f)
-    token = conf["token"]
-    channel_id = conf["channel"]
+try:
+    with open("config.json") as f:
+        conf = json.load(f)
+        if not "token" in conf:
+            print("config.json does not contain token", file=sys.stderr)
+            exit()
+        if not "channel" in conf:
+            print("config.json does not contain channel", file=sys.stderr)
+            exit()
+        token = conf["token"]
+        channel_id = conf["channel"]
+except FileNotFoundError:
+    print("config.json does not exist", file=sys.stderr)
+    exit()
+except json.decoder.JSONDecodeError:
+    print("config.json is not a velid JSON file", file=sys.stderr)
+    exit()
 
 @client.event
 async def on_ready():
@@ -36,7 +49,7 @@ async def on_command_error(ctx, error):
 async def watch(ctx):
     msg = ctx.message.content
     addr = msg.split(maxsplit=1)[1]
-    if len(addr.split()) > 1: #TODO: lepší check
+    if len(addr.split()) > 1:
         ctx.message.channel.send("it has to be one valid url!")
     if addr[:7] != "http://" and addr[:8] != "https://":
         addr = "http://" + addr
@@ -54,7 +67,7 @@ async def watch(ctx):
 async def check(ctx):
     msg = ctx.message.content
     addr = msg.split(maxsplit=1)[1]
-    if len(addr.split()) > 1: #TODO: lepší check
+    if len(addr.split()) > 1:
         ctx.message.channel.send("it has to be one valid url!")
     if addr[:7] != "http://" and addr[:8] != "https://":
         addr = "http://" + addr
