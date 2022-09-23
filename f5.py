@@ -100,7 +100,6 @@ async def check(ctx):
 @tasks.loop(hours=2)
 async def check_all():
     message_channel = client.get_channel(channel_id)
-    await message_channel.send("test 1")
     
     with open("webs.json", "r") as webs:
         state = json.load(webs)
