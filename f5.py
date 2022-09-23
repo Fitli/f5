@@ -97,7 +97,7 @@ async def check(ctx):
     else:
         await ctx.message.channel.send(f"{addr} has not changed...")
 
-@tasks.loop(seconds=10)
+@tasks.loop(hours=2)
 async def check_all():
     message_channel = client.get_channel(channel_id)
     await message_channel.send("test 1")
