@@ -1,5 +1,6 @@
 import json
 import sys
+import re
 
 import requests
 
@@ -7,10 +8,11 @@ import discord
 from discord.ext import commands, tasks
 
 def myHash(text:str):
-  hash=0
-  for ch in text:
-    hash = ( hash*59611  ^ ord(ch)*65543) & 0xFFFFFFFF
-  return hash
+    text = re.sub(r'([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?', '', text)
+    hash=0
+    for ch in text:
+        hash = ( hash*59611  ^ ord(ch)*65543) & 0xFFFFFFFF
+    return hash
 
 
 intents = discord.Intents.default()
